@@ -5,8 +5,8 @@ import com.finalchallenge.app.dto.request.employee.EmployeeWithDetailsRequestDTO
 import com.finalchallenge.app.dto.response.employee.EmployeeFullDataResponseDTO;
 import com.finalchallenge.app.dto.response.employee.EmployeeOnlyResponseDTO;
 import com.finalchallenge.app.dto.response.employee.EmployeePagesResponseDTO;
-import com.finalchallenge.app.entities.EmployeeEntity;
 import com.finalchallenge.app.mappers.IEmployeeMapper;
+import com.finalchallenge.app.entities.EmployeeEntity;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

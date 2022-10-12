@@ -1,9 +1,9 @@
 package com.finalchallenge.app.mappers.impl;
 
+import com.finalchallenge.app.mappers.IProjectMapper;
 import com.finalchallenge.app.dto.response.project.ProjectPagesResponseDTO;
 import com.finalchallenge.app.dto.response.project.ProjectResponseDTO;
 import com.finalchallenge.app.entities.ProjectEntity;
-import com.finalchallenge.app.mappers.IProjectMapper;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

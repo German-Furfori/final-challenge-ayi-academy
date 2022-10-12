@@ -1,9 +1,7 @@
 package com.finalchallenge.app.services.impl;
 
-import com.finalchallenge.app.dto.response.employee.EmployeePagesResponseDTO;
 import com.finalchallenge.app.dto.response.project.ProjectPagesResponseDTO;
 import com.finalchallenge.app.dto.response.project.ProjectResponseDTO;
-import com.finalchallenge.app.entities.EmployeeEntity;
 import com.finalchallenge.app.entities.ProjectEntity;
 import com.finalchallenge.app.exceptions.RepositoryAccessException;
 import com.finalchallenge.app.mappers.IProjectMapper;
