@@ -4,14 +4,14 @@ const initialState = {
   initialState: {
     isLoading: false,
     page: 0,
-    employees: []
+    employeePages: {},
   }
 }
 
 // The slice is a function that receives an object that has a name, an initial state and the reducers
 
-export const employeeSlice = createSlice({
-  name: 'employee',
+export const employeePagesSlice = createSlice({
+  name: 'employeePages',
   initialState,
   reducers: {
     startLoadingEmployees: (state) => {
@@ -25,5 +25,4 @@ export const employeeSlice = createSlice({
   },
 })
 
-// Action creators are generated for each case reducer function
-export const { startLoadingEmployees, setEmployees } = employeeSlice.actions
+export const { startLoadingEmployees, setEmployees } = employeePagesSlice.actions

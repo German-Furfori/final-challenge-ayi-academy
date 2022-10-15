@@ -10,19 +10,14 @@ import com.finalchallenge.app.dto.response.employee.EmployeePagesResponseDTO;
 import com.finalchallenge.app.exceptions.RepositoryAccessException;
 
 public interface IEmployeeService {
-    EmployeeFullDataResponseDTO addEmployeeWithoutProject(EmployeeWithDetailsRequestDTO employeeWithDetailsRequestDTO) throws RepositoryAccessException;
-
-    EmployeeFullDataResponseDTO addEmployeeWithProject(Long idProject, EmployeeWithDetailsRequestDTO employeeWithDetailsRequestDTO) throws RepositoryAccessException;
 
     EmployeePagesResponseDTO findAllClientPages(Integer page, Integer size) throws RepositoryAccessException;
 
     EmployeeFullDataResponseDTO findEmployeeById(Long idEmployee);
 
-    EmployeeOnlyResponseDTO modifyEmployeeOnly(Long idEmployee, EmployeeOnlyRequestDTO employeeOnlyRequestDTO);
-
-    DetailsResponseDTO modifyEmployeeDetails(Long idEmployee, DetailsRequestDTO detailsRequestDTO);
-
     EmployeeFullDataResponseDTO assignProjectToEmployee(Long idEmployee, Long idProject);
 
-    EmployeeFullDataResponseDTO removeEmployee(Long idEmployee) throws RepositoryAccessException;
+    void incrementSalaries(Double percentage);
+
+    void modifyEmployeeSalary(Long idEmployee, Long salary);
 }

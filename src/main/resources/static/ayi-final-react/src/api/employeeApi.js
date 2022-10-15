@@ -1,5 +1,17 @@
 export async function getAllEmployeePages(page) {
-    let response = await fetch(`http://localhost:8080/api/employee/getAllEmployeePages/${page}/8`, {
+    let rows = 10;
+    let response = await fetch(`http://localhost:8080/api/employee/getAllEmployeePages/${page}/${rows}`, {
+        "method": 'GET',
+        "headers": {
+            "Content-Type": 'application/json'
+        }
+    });
+
+    return await response.json();
+}
+
+export async function getEmployeeDetails(id) {
+    let response = await fetch(`http://localhost:8080/api/employee/getEmployeeById/${id}`, {
         "method": 'GET',
         "headers": {
             "Content-Type": 'application/json'

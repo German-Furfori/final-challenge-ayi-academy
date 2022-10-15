@@ -34,4 +34,7 @@ public class DetailsEntity {
     @OneToOne(mappedBy = "employeeDetails")
     private EmployeeEntity employee;
 
+    public void incrementSalary(Double percentage) {
+        this.salary = (long) (this.salary * (1 + percentage / 100.0 ));
+    }
 }

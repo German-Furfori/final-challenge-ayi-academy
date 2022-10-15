@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.finalchallenge.app.constants.ExceptionStrings.*;
-import static com.finalchallenge.app.constants.HashMapStrings.ERROR_CODE;
-import static com.finalchallenge.app.constants.HashMapStrings.ERROR_MESSAGE;
+import static com.finalchallenge.app.constants.HashMapStrings.CODE;
+import static com.finalchallenge.app.constants.HashMapStrings.MESSAGE;
 
 @RestControllerAdvice
 public class GlobalHandlerException {
@@ -23,8 +23,8 @@ public class GlobalHandlerException {
 
         Map<String, Object> responseException = new HashMap<>();
 
-        responseException.put(ERROR_CODE, HttpStatus.INTERNAL_SERVER_ERROR.value());
-        responseException.put(ERROR_MESSAGE, GLOBAL_ERROR);
+        responseException.put(CODE, HttpStatus.INTERNAL_SERVER_ERROR.value());
+        responseException.put(MESSAGE, GLOBAL_ERROR);
 
         return new ResponseEntity<>(responseException, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -34,8 +34,8 @@ public class GlobalHandlerException {
 
         Map<String, Object> responseException = new HashMap<>();
 
-        responseException.put(ERROR_CODE, HttpStatus.BAD_REQUEST.value());
-        responseException.put(ERROR_MESSAGE, NOT_NULL_PROPERTY);
+        responseException.put(CODE, HttpStatus.BAD_REQUEST.value());
+        responseException.put(MESSAGE, NOT_NULL_PROPERTY);
 
         return new ResponseEntity<>(responseException, HttpStatus.BAD_REQUEST);
     }
@@ -46,8 +46,8 @@ public class GlobalHandlerException {
 
         Map<String, Object> responseException = new HashMap<>();
 
-        responseException.put(ERROR_CODE, HttpStatus.BAD_REQUEST.value());
-        responseException.put(ERROR_MESSAGE, JSON_PARSE_ERROR);
+        responseException.put(CODE, HttpStatus.BAD_REQUEST.value());
+        responseException.put(MESSAGE, JSON_PARSE_ERROR);
 
         return new ResponseEntity<>(responseException, HttpStatus.BAD_REQUEST);
     }
@@ -57,8 +57,8 @@ public class GlobalHandlerException {
 
         Map<String, Object> responseException = new HashMap<>();
 
-        responseException.put(ERROR_CODE, HttpStatus.BAD_REQUEST.value());
-        responseException.put(ERROR_MESSAGE, READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+        responseException.put(CODE, HttpStatus.BAD_REQUEST.value());
+        responseException.put(MESSAGE, READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
 
         return new ResponseEntity<>(responseException, HttpStatus.BAD_REQUEST);
     }

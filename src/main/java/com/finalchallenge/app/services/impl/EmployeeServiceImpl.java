@@ -1,11 +1,6 @@
 package com.finalchallenge.app.services.impl;
 
-import com.finalchallenge.app.dto.request.details.DetailsRequestDTO;
-import com.finalchallenge.app.dto.request.employee.EmployeeOnlyRequestDTO;
-import com.finalchallenge.app.dto.request.employee.EmployeeWithDetailsRequestDTO;
-import com.finalchallenge.app.dto.response.details.DetailsResponseDTO;
 import com.finalchallenge.app.dto.response.employee.EmployeeFullDataResponseDTO;
-import com.finalchallenge.app.dto.response.employee.EmployeeOnlyResponseDTO;
 import com.finalchallenge.app.dto.response.employee.EmployeePagesResponseDTO;
 import com.finalchallenge.app.entities.EmployeeEntity;
 import com.finalchallenge.app.entities.ProjectEntity;
@@ -24,7 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.finalchallenge.app.constants.ExceptionStrings.READ_ACCESS_EXCEPTION_NOT_FOUND;
+import static com.finalchallenge.app.constants.ExceptionStrings.SALARY_INCORRECT;
 
 @Service
 @Slf4j
@@ -42,36 +40,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
     private IDetailsMapper detailsMapper;
 
     private Utils utils;
-
-    @Override
-    public EmployeeFullDataResponseDTO addEmployeeWithoutProject(EmployeeWithDetailsRequestDTO employeeWithDetailsRequestDTO) throws RepositoryAccessException {
-
-        utils.verifyEmployeeDni(employeeWithDetailsRequestDTO.getDni());
-
-        EmployeeEntity employeeEntity = employeeMapper.fromDtoFullDataToEntity(employeeWithDetailsRequestDTO);
-        employeeEntity.setIsActive(true);
-
-        employeeRepository.save(employeeEntity);
-
-        return employeeMapper.fromEntityToDtoFullData(employeeEntity);
-
-    }
-
-    @Override
-    public EmployeeFullDataResponseDTO addEmployeeWithProject(Long idProject, EmployeeWithDetailsRequestDTO employeeWithDetailsRequestDTO) throws RepositoryAccessException {
-
-        utils.verifyEmployeeDni(employeeWithDetailsRequestDTO.getDni());
-        ProjectEntity projectEntity = utils.verifyProjectId(idProject);
-
-        EmployeeEntity employeeEntity = employeeMapper.fromDtoFullDataToEntity(employeeWithDetailsRequestDTO);
-        employeeEntity.setIsActive(true);
-        employeeEntity.setProject(projectEntity);
-
-        employeeRepository.save(employeeEntity);
-
-        return employeeMapper.fromEntityToDtoFullData(employeeEntity);
-
-    }
 
     @Override
     public EmployeePagesResponseDTO findAllClientPages(Integer page, Integer size) throws RepositoryAccessException {
@@ -104,34 +72,6 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public EmployeeOnlyResponseDTO modifyEmployeeOnly(Long idEmployee, EmployeeOnlyRequestDTO employeeOnlyRequestDTO) {
-
-        EmployeeEntity employeeEntity = utils.verifyEmployeeId(idEmployee);
-
-        EmployeeEntity employeeEntityUpdated = employeeMapper.fromDtoOnlyToEntity(employeeOnlyRequestDTO);
-        employeeEntityUpdated.setIdEmployee(idEmployee);
-        employeeEntityUpdated.setProject(employeeEntity.getProject());
-        employeeEntityUpdated.setEmployeeDetails(employeeEntity.getEmployeeDetails());
-        employeeRepository.save(employeeEntityUpdated);
-
-        return employeeMapper.fromEntityToDtoOnly(employeeEntityUpdated);
-
-    }
-
-    @Override
-    public DetailsResponseDTO modifyEmployeeDetails(Long idEmployee, DetailsRequestDTO detailsRequestDTO) {
-
-        EmployeeEntity employeeEntity = utils.verifyEmployeeId(idEmployee);
-        employeeEntity.getEmployeeDetails().setSeniority(detailsRequestDTO.getSeniority());
-        employeeEntity.getEmployeeDetails().setRole(detailsRequestDTO.getRole());
-        employeeEntity.getEmployeeDetails().setSalary(detailsRequestDTO.getSalary());
-        employeeRepository.save(employeeEntity);
-
-        return detailsMapper.fromRequestToResponse(detailsRequestDTO);
-
-    }
-
-    @Override
     public EmployeeFullDataResponseDTO assignProjectToEmployee(Long idEmployee, Long idProject) {
 
         ProjectEntity projectEntity = utils.verifyProjectId(idProject);
@@ -145,16 +85,33 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public EmployeeFullDataResponseDTO removeEmployee(Long idEmployee) throws RepositoryAccessException {
+    public void incrementSalaries(Double percentage) {
+
+        List<EmployeeEntity> employeeEntityList = employeeRepository.findAll();
+
+        if (employeeEntityList == null || employeeEntityList.size() == 0) {
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+        }
+
+        employeeEntityList.forEach(employeeEntity -> {
+            employeeEntity.getEmployeeDetails().incrementSalary(percentage);
+            employeeRepository.save(employeeEntity);
+        });
+
+    }
+
+    @Override
+    public void modifyEmployeeSalary(Long idEmployee, Long salary) {
 
         EmployeeEntity employeeEntity = utils.verifyEmployeeId(idEmployee);
 
-        employeeEntity.setIsActive(false);
-        employeeEntity.setEmployeeDetails(null);
-        employeeEntity.setProject(null);
-        employeeRepository.save(employeeEntity);
+        if(salary == null || !(salary instanceof Long)) {
+            throw new RepositoryAccessException(SALARY_INCORRECT);
+        } else {
+            employeeEntity.getEmployeeDetails().setSalary(salary);
+            employeeRepository.save(employeeEntity);
+        }
 
-        return employeeMapper.fromEntityToDtoFullData(employeeEntity);
     }
 
 }

@@ -18,12 +18,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.finalchallenge.app.constants.HashMapStrings.ERROR_CODE;
-import static com.finalchallenge.app.constants.HashMapStrings.ERROR_MESSAGE;
+import static com.finalchallenge.app.constants.HashMapStrings.CODE;
+import static com.finalchallenge.app.constants.HashMapStrings.MESSAGE;
 
 @AllArgsConstructor
 @Api(value = "Project API", tags = {"Project services"})
@@ -65,8 +64,8 @@ public class ProjectController {
         try {
             projectPagesResponseDTO = projectService.findAllProjectPages(page - 1, size);
         } catch (RepositoryAccessException e) {
-            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
-            response.put(ERROR_MESSAGE, e.getMessage());
+            response.put(CODE, HttpStatus.NOT_FOUND.value());
+            response.put(MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
@@ -102,8 +101,8 @@ public class ProjectController {
         try {
             projectResponseDTO = projectService.findProjectById(idProject);
         } catch (RepositoryAccessException e) {
-            response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
-            response.put(ERROR_MESSAGE, e.getMessage());
+            response.put(CODE, HttpStatus.NOT_FOUND.value());
+            response.put(MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
