@@ -24,19 +24,18 @@ import java.util.Map;
 
 import static com.finalchallenge.app.constants.HashMapStrings.ERROR_CODE;
 import static com.finalchallenge.app.constants.HashMapStrings.ERROR_MESSAGE;
-import static com.finalchallenge.app.constants.IntegerConstants.PAGE_SIZE;
 
 @AllArgsConstructor
 @Api(value = "Project API", tags = {"Project services"})
 @Slf4j
-@RequestMapping(value = "/project", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "/api/project", produces = {MediaType.APPLICATION_JSON_VALUE})
 @RestController
 public class ProjectController {
 
     IProjectService projectService;
 
     @GetMapping(
-            value = "/getAllProjectPages/{page}",
+            value = "/getAllProjectPages/{page}/{size}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
@@ -55,14 +54,16 @@ public class ProjectController {
     })
     public ResponseEntity<?> getAllProjectPages(
             @ApiParam(value = "Page to display", required = true, example = "1")
-            @PathVariable(name = "page") Integer page) {
+            @PathVariable(name = "page") Integer page,
+            @ApiParam(value = "Size of the page", required = true, example = "8")
+            @PathVariable(name = "size") Integer size) {
 
         Map<String, Object> response = new HashMap<>();
 
         ProjectPagesResponseDTO projectPagesResponseDTO;
 
         try {
-            projectPagesResponseDTO = projectService.findAllProjectPages(page - 1, PAGE_SIZE);
+            projectPagesResponseDTO = projectService.findAllProjectPages(page - 1, size);
         } catch (RepositoryAccessException e) {
             response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());

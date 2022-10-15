@@ -27,12 +27,11 @@ import java.util.Map;
 
 import static com.finalchallenge.app.constants.HashMapStrings.ERROR_CODE;
 import static com.finalchallenge.app.constants.HashMapStrings.ERROR_MESSAGE;
-import static com.finalchallenge.app.constants.IntegerConstants.PAGE_SIZE;
 
 @AllArgsConstructor
 @Api(value = "Employee API", tags = {"Employee services"})
 @Slf4j
-@RequestMapping(value = "/employee", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "/api/employee", produces = {MediaType.APPLICATION_JSON_VALUE})
 @RestController
 public class EmployeeController {
 
@@ -108,7 +107,7 @@ public class EmployeeController {
     }
 
     @GetMapping(
-            value = "/getAllEmployeePages/{page}",
+            value = "/getAllEmployeePages/{page}/{size}",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
@@ -127,14 +126,16 @@ public class EmployeeController {
     })
     public ResponseEntity<?> getAllEmployeePages(
             @ApiParam(value = "Page to display", required = true, example = "1")
-            @PathVariable(name = "page") Integer page) {
+            @PathVariable(name = "page") Integer page,
+            @ApiParam(value = "Size of the page", required = true, example = "8")
+            @PathVariable(name = "size") Integer size) {
 
         Map<String, Object> response = new HashMap<>();
 
         EmployeePagesResponseDTO employeePagesResponseDTO;
 
         try {
-            employeePagesResponseDTO = employeeService.findAllClientPages(page - 1, PAGE_SIZE);
+            employeePagesResponseDTO = employeeService.findAllClientPages(page - 1, size);
         } catch (RepositoryAccessException e) {
             response.put(ERROR_CODE, HttpStatus.NOT_FOUND.value());
             response.put(ERROR_MESSAGE, e.getMessage());
