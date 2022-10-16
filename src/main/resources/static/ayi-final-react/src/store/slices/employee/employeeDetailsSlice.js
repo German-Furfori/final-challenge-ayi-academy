@@ -4,7 +4,8 @@ const initialState = {
   initialState: {
     firstName: '',
     lastName: '',
-    employeeDetails: {}
+    employeeDetails: {},
+    project: {}
   }
 }
 
@@ -13,7 +14,10 @@ export const employeeDetailsSlice = createSlice({
   initialState,
   reducers: {
     setEmployeeDetails: (state, action) => {
+        state.firstName = action.payload.firstName;
+        state.lastName = action.payload.lastName;
         state.employeeDetails = action.payload.employeeDetails;
+        state.project = action.payload.project;
       }
   },
 })

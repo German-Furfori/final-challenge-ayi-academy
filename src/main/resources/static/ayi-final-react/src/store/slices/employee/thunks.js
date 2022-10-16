@@ -10,8 +10,6 @@ export function findAllEmployeePages(page = 1) {
 
         const data = await getAllEmployeePages(page);
 
-        console.log(data);
-
         dispatch(setEmployees({
             employees: data,
             page: page + 1
@@ -19,16 +17,17 @@ export function findAllEmployeePages(page = 1) {
     }
 }
 
-export function findEmployeeDetails(id) {
+export function findEmployeeDetails(idEmployee) {
     return async function(dispatch) {
-        const data = await getEmployeeDetails(id);
+        const data = await getEmployeeDetails(idEmployee);
 
         console.log(data);
 
         dispatch(setEmployeeDetails({
-            firstName: data.fistName,
+            firstName: data.firstName,
             lastName: data.lastName,
-            employeeDetails: data.employeeDetails
+            employeeDetails: data.employeeDetails,
+            project: data.project
         }))
     }
 }

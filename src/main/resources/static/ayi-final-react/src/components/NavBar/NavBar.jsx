@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -15,7 +16,16 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 const drawerWidth = 240;
-const navItems = ['Home', 'About', 'Contact'];
+// const navItems = ['Home', 'Employees'];
+
+const navItems = [
+  <Link style={{ textDecoration: 'none', color: 'white' }} to="/">
+    Home
+  </Link>,
+  <Link style={{ textDecoration: 'none', color: 'white' }} to="/employees">
+    Employees
+  </Link>
+];
 
 function DrawerAppBar(props) {
   const { window } = props;
@@ -28,7 +38,7 @@ function DrawerAppBar(props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        Final Challenge
       </Typography>
       <Divider />
       <List>
@@ -63,7 +73,7 @@ function DrawerAppBar(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            MUI
+            Final Challenge
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (

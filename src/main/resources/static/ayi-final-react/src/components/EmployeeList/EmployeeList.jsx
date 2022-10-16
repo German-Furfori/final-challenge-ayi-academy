@@ -7,17 +7,16 @@ import TableRow from '@mui/material/TableRow';
 import Pagination from '@mui/material/Pagination';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { Link } from 'react-router-dom';
 import { Container, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { findAllEmployeePages } from '../../store/slices/employee';
-import EmployeeDetails from '../EmployeeDetails/EmployeeDetails';
+import { incrementSalaries } from '../../api/employeeApi';
 
 export default function EmployeeList() {
-  const [open, setOpen] = useState(false);
   const { isLoading, employees = {} } = useSelector(state => state.employeePages); // I had to especify that employees is an object with = {}
-  const { employeeDetails = {} } = useSelector(state => state.employeeDetails);
   const dispatch = useDispatch();
 
   const handleChangePage = (event, value) => {
@@ -25,14 +24,21 @@ export default function EmployeeList() {
     dispatch(findAllEmployeePages(value));
   }
 
-  const handleOpen = () => {
-    setOpen(true);
-  }
-  const handleClose = () => setOpen(false);
-
   useEffect(() => {
     dispatch(findAllEmployeePages());
   }, [dispatch]);
+
+  const handleIncrementSalariesButton = async () => {
+    let percentage = document.getElementById('percentageInput').value;
+    if(percentage && percentage <= 100) {
+      let response = await incrementSalaries(percentage);
+      alert(response.Message);
+    }
+  }
+
+  const handleUpdateSalaryButton = async () => {
+
+  }
   
   return (
     <Container fixed sx={{ padding: 5 }}>
@@ -44,6 +50,17 @@ export default function EmployeeList() {
       ) : (
         <>
           <Typography variant="h4" color='white' sx={{ paddingBottom: 2, paddingTop: 8 }}>List of employees</Typography>
+          <Button 
+            sx={{ marginBottom: 3, marginRight: 3, color: '#fff' }}
+            onClick={handleIncrementSalariesButton}
+          >
+            Increment Salaries
+          </Button>
+          <OutlinedInput 
+            placeholder='Percentage'
+            type='number'
+            id='percentageInput'
+          />
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-labelledby="simple table" className='setBackground'>
                 <TableHead>
@@ -53,8 +70,7 @@ export default function EmployeeList() {
                     <TableCell align="left">LastName</TableCell>
                     <TableCell align="left">DNI</TableCell>
                     <TableCell align="left">Email</TableCell>
-                    <TableCell align="left">Details</TableCell>
-                    <TableCell align="left">Actions</TableCell>
+                    <TableCell align="center">Details</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -65,22 +81,13 @@ export default function EmployeeList() {
                       <TableCell align="left">{employee.lastName}</TableCell>
                       <TableCell align="left">{employee.dni}</TableCell>
                       <TableCell align="left">{employee.email}</TableCell>
-                      <TableCell align="left">
-                        <Button onClick={handleOpen}>Details</Button>
-                        <Modal
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="modal-modal-title"
-                          aria-describedby="modal-modal-description"
-                        >
-                          <EmployeeDetails
-                            firstName = {employee.firstName}
-                            lastName = {employee.lastName}
-                            employeeDetails = {employee.employeeDetails}
-                          />
-                        </Modal>
+                      <TableCell align="center">
+                        <Button sx={{ color: '#fff', alignContent: 'center' }}>
+                          <Link style={{ textDecoration: 'none', color: 'white' }} to={`../employee/${employee.idEmployee}`}>
+                            Details
+                          </Link>
+                        </Button>
                       </TableCell>
-                      <TableCell align="left">Actions</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
