@@ -1,5 +1,6 @@
 import './App.css';
-import AppRoutes from './components/AppRoutes';
+import AppRoutes from './routes/AppRoutes';
+import NavBar from './components/NavBar/NavBar';
 import { store } from './store/store';
 import { Provider } from 'react-redux';
 import { ThemeProvider, createTheme } from '@mui/material/styles';

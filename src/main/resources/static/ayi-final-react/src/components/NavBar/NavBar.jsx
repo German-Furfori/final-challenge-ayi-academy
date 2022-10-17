@@ -14,22 +14,35 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useSelector } from 'react-redux';
+import { isUserLogged } from '../../store/slices/user/userFunctions';
 
 const drawerWidth = 240;
-// const navItems = ['Home', 'Employees'];
-
-const navItems = [
-  <Link style={{ textDecoration: 'none', color: 'white' }} to="/">
-    Home
-  </Link>,
-  <Link style={{ textDecoration: 'none', color: 'white' }} to="/employees">
-    Employees
-  </Link>
-];
 
 function DrawerAppBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { userLogged } = useSelector((state) => state.user);
+
+  const navItems = isUserLogged(userLogged) ? 
+  [
+    <Link style={{ textDecoration: 'none', color: 'white' }} to="/home">
+      Home
+    </Link>,
+    <Link style={{ textDecoration: 'none', color: 'white' }} to="/employees">
+      Employees
+    </Link>,
+    <Link style={{ textDecoration: 'none', color: 'white' }} to="/logout">
+      Log Out
+    </Link>,
+  ] : [
+    <Link style={{ textDecoration: 'none', color: 'white' }} to="/">
+      Log In
+    </Link>,
+    <Link style={{ textDecoration: 'none', color: 'white' }} to="/register">
+      Register
+    </Link>
+  ];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

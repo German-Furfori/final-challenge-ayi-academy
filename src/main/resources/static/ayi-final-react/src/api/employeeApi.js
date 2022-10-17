@@ -1,5 +1,5 @@
 export async function getAllEmployeePages(page) {
-    let rows = 10;
+    let rows = 8;
     let response = await fetch(`http://localhost:8080/api/employee/getAllEmployeePages/${page}/${rows}`, {
         "method": 'GET',
         "headers": {
@@ -10,7 +10,7 @@ export async function getAllEmployeePages(page) {
     return await response.json();
 }
 
-export async function getEmployeeDetails(idEmployee) {
+export async function getEmployeeById(idEmployee) {
     let response = await fetch(`http://localhost:8080/api/employee/getEmployeeById/${idEmployee}`, {
         "method": 'GET',
         "headers": {
@@ -23,6 +23,28 @@ export async function getEmployeeDetails(idEmployee) {
 
 export async function incrementSalaries(percentage) {
     let response = await fetch(`http://localhost:8080/api/employee/incrementSalaries/${percentage}`, {
+        "method": 'PATCH',
+        "headers": {
+            "Content-Type": 'application/json'
+        }
+    });
+
+    return await response.json();
+}
+
+export async function assignProjectToEmployee(idEmployee, idProject) {
+    let response = await fetch(`http://localhost:8080/api/employee/assignProjectToEmployee/${idEmployee}/${idProject}`, {
+        "method": 'PATCH',
+        "headers": {
+            "Content-Type": 'application/json'
+        }
+    });
+
+    return await response.json();
+}
+
+export async function updateEmployeeSalary(idEmployee, salary) {
+    let response = await fetch(`http://localhost:8080/api/employee/updateEmployeeSalary/${idEmployee}/${salary}`, {
         "method": 'PATCH',
         "headers": {
             "Content-Type": 'application/json'
