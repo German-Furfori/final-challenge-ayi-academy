@@ -55,7 +55,7 @@ export default function EmployeeDetails() {
                     </li>
                     { project.customer === 'Link' ? 
                       <img src={Link} alt=''/> : project.customer === 'Arcor' ? 
-                      <img src={Arcor} alt=''/> : project.customer === 'Naranja' ? 
+                      <img src={Arcor} alt=''/> : project.customer === 'Municipalidad de Córdoba' ? 
                       <img src={Cordoba} alt=''/> : <img src={Zurich} alt=''/>
                     }
                     <li>

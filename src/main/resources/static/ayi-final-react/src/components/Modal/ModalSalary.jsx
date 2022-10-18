@@ -38,7 +38,7 @@ export default function ModalSalary(props) {
 
   return (
     <div>
-      <Button onClick={handleOpen} sx={{ color: '#fff' }}>Update Salary</Button>
+      <Button onClick={handleOpen} sx={{ color: '#fff', fontSize: 20 }}>Update Salary</Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

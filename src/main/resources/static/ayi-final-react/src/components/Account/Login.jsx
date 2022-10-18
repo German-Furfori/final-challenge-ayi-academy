@@ -83,10 +83,9 @@ export default function SignIn() {
                     <Button
                         type="submit"
                         fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2, marginTop: 2 }}
+                        sx={{ mt: 3, mb: 2, marginTop: 2, color: '#fff', fontSize: 20 }}
                     >
-                        Log In
+                        Go
                     </Button>
                 </Box>
             </Box>

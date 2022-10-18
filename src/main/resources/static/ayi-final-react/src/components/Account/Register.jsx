@@ -133,8 +133,7 @@ export default function Register() {
             <Button
               type="submit"
               fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, marginTop: 2, color: '#fff', fontSize: 20 }}
             >
               Sign In
             </Button>

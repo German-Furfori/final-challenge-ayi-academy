@@ -43,7 +43,7 @@ export default function EmployeeList() {
         </Container>
       ) : (
         <>
-          <Typography align='center' variant="h4" color='white' sx={{ paddingBottom: 2, paddingTop: 8 }}> List of Employees </Typography>
+          <Typography align='center' variant="h4" color='white' sx={{ paddingTop: 6 }}> List of Employees </Typography>
           <ModalSalaries/>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-labelledby="simple table" className='setBackground'>
@@ -66,7 +66,7 @@ export default function EmployeeList() {
                       <TableCell align="left">{employee.dni}</TableCell>
                       <TableCell align="left">{employee.email}</TableCell>
                       <TableCell align="center">
-                        <Button sx={{ color: '#fff', alignContent: 'center' }}>
+                        <Button sx={{ color: '#fff', alignContent: 'center', fontSize: 15 }}>
                           <Link style={{ textDecoration: 'none', color: 'white' }} to={`../employee/${employee.idEmployee}`}>
                             Details
                           </Link>

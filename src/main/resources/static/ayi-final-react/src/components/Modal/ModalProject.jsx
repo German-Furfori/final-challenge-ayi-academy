@@ -55,7 +55,7 @@ export default function ModalProject(props) {
 
   return (
     <div>
-      <Button onClick={handleOpen} sx={{ color: '#fff' }}>Assign Project</Button>
+      <Button onClick={handleOpen} sx={{ color: '#fff', fontSize: 20 }}>Assign Project</Button>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
