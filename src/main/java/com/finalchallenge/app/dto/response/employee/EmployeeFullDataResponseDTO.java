@@ -1,6 +1,5 @@
 package com.finalchallenge.app.dto.response.employee;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.finalchallenge.app.dto.response.details.DetailsResponseDTO;
 import com.finalchallenge.app.dto.response.project.ProjectResponseDTO;
 import io.swagger.annotations.ApiModel;
@@ -44,7 +43,6 @@ public class EmployeeFullDataResponseDTO {
     private DetailsResponseDTO employeeDetails;
 
     @ApiModelProperty(position = 8, notes = "Assigned project")
-    @JsonIgnoreProperties(value = "employeeList")
     private ProjectResponseDTO project;
 
 }

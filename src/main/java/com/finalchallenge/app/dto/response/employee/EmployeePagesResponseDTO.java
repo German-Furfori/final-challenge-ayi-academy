@@ -20,7 +20,7 @@ import java.util.List;
 public class EmployeePagesResponseDTO {
 
     @ApiModelProperty(position = 1, notes = "Employee list")
-    private List<EmployeeFullDataResponseDTO> employeeFullDataResponseDTOList;
+    private List<EmployeeOnlyResponseDTO> employeeOnlyResponseDTOList;
 
     @ApiModelProperty(position = 2, notes = "Total pages")
     private Integer totalPages;

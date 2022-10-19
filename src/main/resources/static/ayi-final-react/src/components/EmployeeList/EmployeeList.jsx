@@ -58,7 +58,7 @@ export default function EmployeeList() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {employees.employeeFullDataResponseDTOList?.map((employee) => ( // The ? was because the DOM start to render before getting the array
+                  {employees.employeeOnlyResponseDTOList?.map((employee) => ( 
                     <TableRow key={employee.idEmployee}>
                       <TableCell align="center">{employee.idEmployee}</TableCell>
                       <TableCell align="left">{employee.firstName}</TableCell>

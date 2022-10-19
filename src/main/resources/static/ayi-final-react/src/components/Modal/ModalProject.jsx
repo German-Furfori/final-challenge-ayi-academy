@@ -81,7 +81,7 @@ export default function ModalProject(props) {
                   fullWidth
                 >
                   {projectList.map((project) => (
-                    <MenuItem value={project.idProject}>{project.idProject} - {project.customer}</MenuItem>
+                    <MenuItem value={project.idProject} key={project.idProject}>{project.idProject} - {project.customer}</MenuItem>
                   ))}
                 </Select>
               </Grid>

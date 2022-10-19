@@ -1,17 +1,14 @@
 package com.finalchallenge.app.utils;
 
-import com.finalchallenge.app.entities.DetailsEntity;
 import com.finalchallenge.app.entities.EmployeeEntity;
 import com.finalchallenge.app.entities.ProjectEntity;
+import com.finalchallenge.app.exceptions.PaginationException;
 import com.finalchallenge.app.exceptions.RepositoryAccessException;
-import com.finalchallenge.app.repositories.IDetailsRepository;
 import com.finalchallenge.app.repositories.IEmployeeRepository;
 import com.finalchallenge.app.repositories.IProjectRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,9 +22,6 @@ public class Utils {
     private IEmployeeRepository employeeRepository;
 
     @Autowired
-    private IDetailsRepository detailsRepository;
-
-    @Autowired
     private IProjectRepository projectRepository;
 
     /**
@@ -36,8 +30,8 @@ public class Utils {
      *
      * */
     public EmployeeEntity verifyEmployeeId(Long idEmployee) throws RepositoryAccessException {
-        if(idEmployee == null || idEmployee <= 0) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+        if(idEmployee == null || idEmployee <= 0 || !(idEmployee instanceof Long)) {
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_INCORRECT_ID_EMPLOYEE);
         }
 
         Optional<EmployeeEntity> employeeEntity = employeeRepository.findById(idEmployee);
@@ -55,8 +49,8 @@ public class Utils {
      *
      * */
     public ProjectEntity verifyProjectId(Long idProject) throws RepositoryAccessException {
-        if(idProject == null || idProject <= 0) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+        if(idProject == null || idProject <= 0 || !(idProject instanceof Long)) {
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_INCORRECT_ID_PROJECT);
         }
 
         Optional<ProjectEntity> projectEntity = projectRepository.findById(idProject);
@@ -70,34 +64,18 @@ public class Utils {
 
     /**
      *
-     * Function to verify the integrity or existence of the employee details ID provided
+     * Function to verify the integrity of the page and size provided
      *
      * */
-    public DetailsEntity verifyDetailsId(Long idDetails) throws RepositoryAccessException {
-        if(idDetails == null || idDetails <= 0) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
+    public void verifyPageAndSize(Integer page, Integer size) throws RepositoryAccessException {
+        if(page == null || page < 0 || !(page instanceof Integer) ) {
+            throw new PaginationException(PAGE_INCORRECT);
         }
 
-        Optional<DetailsEntity> detailsEntity = detailsRepository.findById(idDetails);
-
-        if(!detailsEntity.isPresent()) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_DETAILS_ID_NOT_FOUND);
+        if(size == null || size <= 0 || !(size instanceof Integer)) {
+            throw new PaginationException(SIZE_INCORRECT);
         }
 
-        return detailsEntity.get();
-    }
-
-    /**
-     *
-     * Function to verify existence of the DNI provided
-     *
-     * */
-    public void verifyEmployeeDni(String dni) throws RepositoryAccessException {
-        Optional<EmployeeEntity> employeeEntity = employeeRepository.findByDni(dni);
-
-        if(employeeEntity.isPresent()) {
-            throw new RepositoryAccessException(WRITE_ACCESS_EXCEPTION_DNI);
-        }
     }
 
 }

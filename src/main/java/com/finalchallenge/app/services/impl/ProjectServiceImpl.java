@@ -1,23 +1,21 @@
 package com.finalchallenge.app.services.impl;
 
-import com.finalchallenge.app.dto.response.project.ProjectPagesResponseDTO;
 import com.finalchallenge.app.dto.response.project.ProjectResponseDTO;
 import com.finalchallenge.app.entities.ProjectEntity;
 import com.finalchallenge.app.exceptions.RepositoryAccessException;
 import com.finalchallenge.app.mappers.IProjectMapper;
 import com.finalchallenge.app.repositories.IProjectRepository;
 import com.finalchallenge.app.services.IProjectService;
-import com.finalchallenge.app.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.finalchallenge.app.constants.ExceptionStrings.READ_ACCESS_EXCEPTION_NOT_FOUND;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.finalchallenge.app.constants.ExceptionStrings.READ_ACCESS_EXCEPTION_NULL_POINTER;
 
 @Service
 @Slf4j
@@ -31,35 +29,23 @@ public class ProjectServiceImpl implements IProjectService {
     @Autowired
     private IProjectMapper projectMapper;
 
-    private Utils utils;
-
     @Override
-    public ProjectPagesResponseDTO findAllProjectPages(Integer page, Integer size) throws RepositoryAccessException {
+    public List<ProjectResponseDTO> findAllProjectPages() throws RepositoryAccessException {
 
-        ProjectPagesResponseDTO projectPagesResponseDTO;
-        Pageable pageable = PageRequest.of(page, size);
+        List<ProjectResponseDTO> projectResponseDTOList = new ArrayList<>();
+        List<ProjectEntity> projectEntityList = projectRepository.findAll();
 
-        Page<ProjectEntity> projectEntityPages = projectRepository.findAll(pageable);
+        if( projectEntityList != null ) {
+            projectEntityList.forEach(projectEntity -> {
+                ProjectResponseDTO projectResponseDTO;
+                projectResponseDTO = projectMapper.fromEntityToDto(projectEntity);
+                projectResponseDTOList.add(projectResponseDTO);
+            });
 
-        if(projectEntityPages != null && !projectEntityPages.isEmpty()) {
-            projectPagesResponseDTO = projectMapper.fromEntityListToDtoPages(projectEntityPages.getContent());
-            projectPagesResponseDTO.setSize(projectEntityPages.getSize());
-            projectPagesResponseDTO.setCurrentPage(projectEntityPages.getNumber() + 1);
-            projectPagesResponseDTO.setTotalPages(projectEntityPages.getTotalPages());
-            projectPagesResponseDTO.setTotalElements((int) projectEntityPages.getTotalElements());
-            return projectPagesResponseDTO;
+            return projectResponseDTOList;
         } else {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_NULL_POINTER);
         }
-
-    }
-
-    @Override
-    public ProjectResponseDTO findProjectById(Long idProject) {
-
-        ProjectEntity projectEntity = utils.verifyProjectId(idProject);
-
-        return projectMapper.fromEntityToDto(projectEntity);
 
     }
 

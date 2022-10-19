@@ -24,7 +24,7 @@ function DrawerAppBar(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { userLogged } = useSelector((state) => state.user);
 
-  const navItems = isUserLogged(userLogged) ? 
+  const navItems = isUserLogged(userLogged) ?
   [
     <Link style={{ textDecoration: 'none', color: 'white' }} to="/home">
       Home

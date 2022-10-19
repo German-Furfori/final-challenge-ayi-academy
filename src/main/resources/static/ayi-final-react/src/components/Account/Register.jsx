@@ -89,7 +89,7 @@ export default function Register() {
             <PersonAddAltOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            User Register
+            Register
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -127,7 +127,7 @@ export default function Register() {
                 />
               </Grid>
             </Grid>
-            <Typography component="h6" variant="h6">
+            <Typography component="h6" variant="h6" sx={{ paddingTop: 2 }}>
               {message && message}
             </Typography>
             <Button

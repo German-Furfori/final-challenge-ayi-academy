@@ -5,7 +5,6 @@ import com.finalchallenge.app.dto.response.employee.EmployeePagesResponseDTO;
 import com.finalchallenge.app.entities.EmployeeEntity;
 import com.finalchallenge.app.entities.ProjectEntity;
 import com.finalchallenge.app.exceptions.RepositoryAccessException;
-import com.finalchallenge.app.mappers.IDetailsMapper;
 import com.finalchallenge.app.mappers.IEmployeeMapper;
 import com.finalchallenge.app.repositories.IEmployeeRepository;
 import com.finalchallenge.app.services.IEmployeeService;
@@ -21,8 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.finalchallenge.app.constants.ExceptionStrings.READ_ACCESS_EXCEPTION_NOT_FOUND;
-import static com.finalchallenge.app.constants.ExceptionStrings.SALARY_INCORRECT;
+import static com.finalchallenge.app.constants.ExceptionStrings.*;
+import static com.finalchallenge.app.constants.LongConstants.MAXIMUM_PERCENTAGE;
+import static com.finalchallenge.app.constants.LongConstants.MINIMUM_SALARY;
 
 @Service
 @Slf4j
@@ -36,29 +36,30 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Autowired
     private IEmployeeMapper employeeMapper;
 
-    @Autowired
-    private IDetailsMapper detailsMapper;
-
     private Utils utils;
 
     @Override
-    public EmployeePagesResponseDTO findAllClientPages(Integer page, Integer size) throws RepositoryAccessException {
+    public EmployeePagesResponseDTO findAllEmployeePages(Integer page, Integer size) throws RepositoryAccessException {
 
-        EmployeePagesResponseDTO clientFullPagesResponseDTO;
+        utils.verifyPageAndSize(page, size);
+
+        EmployeePagesResponseDTO employeePagesResponseDTO;
         Pageable pageable = PageRequest.of(page, size);
 
         Page<EmployeeEntity> employeeEntityPages = employeeRepository.findAll(pageable);
 
-        if(employeeEntityPages != null && !employeeEntityPages.isEmpty()) {
-            clientFullPagesResponseDTO = employeeMapper.fromEntityListToDtoPages(employeeEntityPages.getContent());
-            clientFullPagesResponseDTO.setSize(employeeEntityPages.getSize());
-            clientFullPagesResponseDTO.setCurrentPage(employeeEntityPages.getNumber() + 1);
-            clientFullPagesResponseDTO.setTotalPages(employeeEntityPages.getTotalPages());
-            clientFullPagesResponseDTO.setTotalElements((int) employeeEntityPages.getTotalElements());
-            return clientFullPagesResponseDTO;
+        if( employeeEntityPages != null ) {
+            employeePagesResponseDTO = employeeMapper.fromEntityListToDtoPages(employeeEntityPages.getContent());
+            employeePagesResponseDTO.setSize(employeeEntityPages.getSize());
+            employeePagesResponseDTO.setCurrentPage(employeeEntityPages.getNumber() + 1);
+            employeePagesResponseDTO.setTotalPages(employeeEntityPages.getTotalPages());
+            employeePagesResponseDTO.setTotalElements((int) employeeEntityPages.getTotalElements());
+
+            return employeePagesResponseDTO;
         } else {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_NULL_POINTER);
         }
+
 
     }
 
@@ -72,7 +73,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     }
 
     @Override
-    public EmployeeFullDataResponseDTO assignProjectToEmployee(Long idEmployee, Long idProject) {
+    public void assignProjectToEmployee(Long idEmployee, Long idProject) {
 
         ProjectEntity projectEntity = utils.verifyProjectId(idProject);
         EmployeeEntity employeeEntity = utils.verifyEmployeeId(idEmployee);
@@ -80,32 +81,30 @@ public class EmployeeServiceImpl implements IEmployeeService {
         employeeEntity.setProject(projectEntity);
         employeeRepository.save(employeeEntity);
 
-        return employeeMapper.fromEntityToDtoFullData(employeeEntity);
-
     }
 
     @Override
-    public void incrementSalaries(Double percentage) {
+    public void incrementSalaries(Double percentage) throws RepositoryAccessException {
 
         List<EmployeeEntity> employeeEntityList = employeeRepository.findAll();
 
-        if (employeeEntityList == null || employeeEntityList.size() == 0) {
-            throw new RepositoryAccessException(READ_ACCESS_EXCEPTION_NOT_FOUND);
+        if(percentage == null || !(percentage instanceof Double) || percentage > MAXIMUM_PERCENTAGE || percentage <= 0) {
+            throw new RepositoryAccessException(PERCENTAGE_INCORRECT);
+        } else {
+            employeeEntityList.forEach(employeeEntity -> {
+                employeeEntity.getEmployeeDetails().incrementSalary(percentage);
+                employeeRepository.save(employeeEntity);
+            });
         }
-
-        employeeEntityList.forEach(employeeEntity -> {
-            employeeEntity.getEmployeeDetails().incrementSalary(percentage);
-            employeeRepository.save(employeeEntity);
-        });
 
     }
 
     @Override
-    public void modifyEmployeeSalary(Long idEmployee, Long salary) {
+    public void modifyEmployeeSalary(Long idEmployee, Long salary) throws RepositoryAccessException {
 
         EmployeeEntity employeeEntity = utils.verifyEmployeeId(idEmployee);
 
-        if(salary == null || !(salary instanceof Long)) {
+        if(salary == null || !(salary instanceof Long) || salary < MINIMUM_SALARY) { // The minimum salary of the company is 100000
             throw new RepositoryAccessException(SALARY_INCORRECT);
         } else {
             employeeEntity.getEmployeeDetails().setSalary(salary);

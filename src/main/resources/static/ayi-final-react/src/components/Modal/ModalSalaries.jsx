@@ -29,10 +29,12 @@ export default function ModalSalaries(props) {
 
   const handleIncrementSalariesButton = async () => {
     let percentage = document.getElementById('percentage').value;
-    if(percentage && percentage <= 100) {
+    if(percentage && percentage <= 100 && percentage > 0) {
       let response = await incrementSalaries(percentage);
       alert(response.Message);
       setOpen(false);
+    } else {
+      alert('Incorrect value');
     }
   }
 

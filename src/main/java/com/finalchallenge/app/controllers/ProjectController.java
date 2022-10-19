@@ -1,16 +1,11 @@
 package com.finalchallenge.app.controllers;
 
-import com.finalchallenge.app.dto.response.employee.EmployeeFullDataResponseDTO;
 import com.finalchallenge.app.dto.response.employee.EmployeePagesResponseDTO;
-import com.finalchallenge.app.dto.response.project.ProjectPagesResponseDTO;
 import com.finalchallenge.app.dto.response.project.ProjectResponseDTO;
 import com.finalchallenge.app.exceptions.RepositoryAccessException;
 import com.finalchallenge.app.services.IProjectService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.finalchallenge.app.constants.HashMapStrings.CODE;
@@ -34,79 +30,29 @@ public class ProjectController {
     IProjectService projectService;
 
     @GetMapping(
-            value = "/getAllProjectPages/{page}/{size}",
+            value = "/getAllProjects",
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     @ApiOperation(
-            value = "Retrieves data associated to all the projects paginated",
+            value = "Retrieves data associated to all the projects",
             httpMethod = "GET",
             response = EmployeePagesResponseDTO.class
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    code = 200,
-                    message = "Body content with the projects information"
-            ),
-            @ApiResponse(
-                    code = 400,
-                    message = "Describes errors on invalid payload received")
-    })
-    public ResponseEntity<?> getAllProjectPages(
-            @ApiParam(value = "Page to display", required = true, example = "1")
-            @PathVariable(name = "page") Integer page,
-            @ApiParam(value = "Size of the page", required = true, example = "8")
-            @PathVariable(name = "size") Integer size) {
+    public ResponseEntity<?> getAllProjects() {
 
         Map<String, Object> response = new HashMap<>();
 
-        ProjectPagesResponseDTO projectPagesResponseDTO;
+        List<ProjectResponseDTO> projectResponseDTOList;
 
         try {
-            projectPagesResponseDTO = projectService.findAllProjectPages(page - 1, size);
+            projectResponseDTOList = projectService.findAllProjectPages();
         } catch (RepositoryAccessException e) {
             response.put(CODE, HttpStatus.NOT_FOUND.value());
             response.put(MESSAGE, e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        return ResponseEntity.ok(projectPagesResponseDTO);
-    }
-
-    @GetMapping(
-            value = "/getProjectById/{idProject}",
-            produces = {MediaType.APPLICATION_JSON_VALUE}
-    )
-    @ApiOperation(
-            value = "Retrieves data associated to the project by Id",
-            httpMethod = "GET",
-            response = EmployeeFullDataResponseDTO.class
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    code = 200,
-                    message = "Body content with the project information"
-            ),
-            @ApiResponse(
-                    code = 400,
-                    message = "Describes errors on invalid payload received")
-    })
-    public ResponseEntity<?> getProjectById(
-            @ApiParam(name = "idProject", required = true, value = "Project Id", example = "1")
-            @PathVariable("idProject") Long idProject) {
-
-        Map<String, Object> response = new HashMap<>();
-
-        ProjectResponseDTO projectResponseDTO;
-
-        try {
-            projectResponseDTO = projectService.findProjectById(idProject);
-        } catch (RepositoryAccessException e) {
-            response.put(CODE, HttpStatus.NOT_FOUND.value());
-            response.put(MESSAGE, e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-
-        return ResponseEntity.ok(projectResponseDTO);
+        return ResponseEntity.ok(projectResponseDTOList);
     }
 
 }

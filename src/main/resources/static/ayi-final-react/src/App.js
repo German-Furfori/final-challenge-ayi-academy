@@ -12,7 +12,7 @@ function App() {
       mode: 'dark',
     },
     typography: {
-      fontFamily: 'Lucida Console'
+      fontFamily: 'Roboto Mono'
     }
   });
 

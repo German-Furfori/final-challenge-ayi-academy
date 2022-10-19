@@ -1,12 +1,10 @@
 package com.finalchallenge.app.exceptions;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,38 +27,15 @@ public class GlobalHandlerException {
         return new ResponseEntity<>(responseException, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> methodArgumentNotValidException() {
+    @ExceptionHandler(WebClientRequestException.class)
+    public ResponseEntity<?> webClientRequestExceptionHandler() {
 
         Map<String, Object> responseException = new HashMap<>();
 
-        responseException.put(CODE, HttpStatus.BAD_REQUEST.value());
-        responseException.put(MESSAGE, NOT_NULL_PROPERTY);
+        responseException.put(CODE, HttpStatus.GATEWAY_TIMEOUT.value());
+        responseException.put(MESSAGE, API_NOT_FOUND);
 
-        return new ResponseEntity<>(responseException, HttpStatus.BAD_REQUEST);
-    }
-
-    // HttpMessageNotReadableException
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<?> httpMessageNotReadableExceptionHandler() {
-
-        Map<String, Object> responseException = new HashMap<>();
-
-        responseException.put(CODE, HttpStatus.BAD_REQUEST.value());
-        responseException.put(MESSAGE, JSON_PARSE_ERROR);
-
-        return new ResponseEntity<>(responseException, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<?> dataIntegrityViolationExceptionHandler() {
-
-        Map<String, Object> responseException = new HashMap<>();
-
-        responseException.put(CODE, HttpStatus.BAD_REQUEST.value());
-        responseException.put(MESSAGE, READ_ACCESS_EXCEPTION_INCORRECT_INPUT);
-
-        return new ResponseEntity<>(responseException, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(responseException, HttpStatus.GATEWAY_TIMEOUT);
     }
 
 }

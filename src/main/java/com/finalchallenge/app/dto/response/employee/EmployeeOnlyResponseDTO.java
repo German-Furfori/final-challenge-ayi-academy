@@ -1,8 +1,5 @@
 package com.finalchallenge.app.dto.response.employee;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.finalchallenge.app.dto.response.details.DetailsResponseDTO;
-import com.finalchallenge.app.dto.response.project.ProjectResponseDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

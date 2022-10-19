@@ -46,30 +46,28 @@ export default function EmployeeDetails() {
                 <Typography variant="h4" component="div">
                   Project Details
                 </Typography>
-                <Typography variant="body2">
-                  <ul>
-                    <li>
-                      <Typography sx={{ mb: 1.5, fontSize: 16 }} color="text.secondary">
-                        Customer:
-                      </Typography> 
-                    </li>
-                    { project.customer === 'Link' ? 
-                      <img src={Link} alt=''/> : project.customer === 'Arcor' ? 
-                      <img src={Arcor} alt=''/> : project.customer === 'Municipalidad de Córdoba' ? 
-                      <img src={Cordoba} alt=''/> : <img src={Zurich} alt=''/>
-                    }
-                    <li>
-                      <Typography sx={{ mb: 1.5, fontSize: 16 }} color="text.secondary">
-                        Technologies: {project.technologies} 
-                      </Typography> 
-                    </li>
-                    <li>
-                      <Typography sx={{ mb: 1.5, fontSize: 16 }} color="text.secondary">
-                        Limit date: {project.limitDate}
-                      </Typography>
-                    </li>
-                  </ul>  
-                </Typography>
+                <ul>
+                  <li>
+                    <Typography sx={{ mb: 1.5, fontSize: 16 }} color="text.secondary">
+                      Customer:
+                    </Typography> 
+                  </li>
+                  { project.customer === 'Link' ? 
+                    <img src={Link} alt=''/> : project.customer === 'Arcor' ? 
+                    <img src={Arcor} alt=''/> : project.customer === 'Municipalidad de Córdoba' ? 
+                    <img src={Cordoba} alt=''/> : <img src={Zurich} alt=''/>
+                  }
+                  <li>
+                    <Typography sx={{ mb: 1.5, fontSize: 16 }} color="text.secondary">
+                      Technologies: {project.technologies} 
+                    </Typography> 
+                  </li>
+                  <li>
+                    <Typography sx={{ mb: 1.5, fontSize: 16 }} color="text.secondary">
+                      Limit date: {project.limitDate}
+                    </Typography>
+                  </li>
+                </ul>  
               </CardContent>
               <CardActions>
                 <ModalProject idEmployee = {idEmployee} />

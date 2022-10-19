@@ -2,13 +2,12 @@ package com.finalchallenge.app.controllers;
 
 import com.finalchallenge.app.dto.response.employee.EmployeeFullDataResponseDTO;
 import com.finalchallenge.app.dto.response.employee.EmployeePagesResponseDTO;
+import com.finalchallenge.app.exceptions.PaginationException;
 import com.finalchallenge.app.exceptions.RepositoryAccessException;
 import com.finalchallenge.app.services.IEmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,15 +41,6 @@ public class EmployeeController {
             httpMethod = "GET",
             response = EmployeePagesResponseDTO.class
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    code = 200,
-                    message = "Body content with the employees information"
-            ),
-            @ApiResponse(
-                    code = 400,
-                    message = "Describes errors on invalid payload received")
-    })
     public ResponseEntity<?> getAllEmployeePages(
             @ApiParam(value = "Page to display", required = true, example = "1")
             @PathVariable(name = "page") Integer page,
@@ -62,7 +52,11 @@ public class EmployeeController {
         EmployeePagesResponseDTO employeePagesResponseDTO;
 
         try {
-            employeePagesResponseDTO = employeeService.findAllClientPages(page - 1, size);
+            employeePagesResponseDTO = employeeService.findAllEmployeePages(page - 1, size);
+        } catch (PaginationException e) {
+            response.put(CODE, HttpStatus.BAD_REQUEST.value());
+            response.put(MESSAGE, e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch (RepositoryAccessException e) {
             response.put(CODE, HttpStatus.NOT_FOUND.value());
             response.put(MESSAGE, e.getMessage());
@@ -81,15 +75,6 @@ public class EmployeeController {
             httpMethod = "GET",
             response = EmployeeFullDataResponseDTO.class
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    code = 200,
-                    message = "Body content with the employee information"
-            ),
-            @ApiResponse(
-                    code = 400,
-                    message = "Describes errors on invalid payload received")
-    })
     public ResponseEntity<?> getEmployeeById(
             @ApiParam(name = "idEmployee", required = true, value = "Employee Id", example = "1")
             @PathVariable("idEmployee") Long idEmployee) {
@@ -115,18 +100,8 @@ public class EmployeeController {
     )
     @ApiOperation(
             value = "Retrieves data associated to the employee assigned project",
-            httpMethod = "PATCH",
-            response = EmployeeFullDataResponseDTO.class
+            httpMethod = "PATCH"
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    code = 201,
-                    message = "Body content with the employee assigned project"
-            ),
-            @ApiResponse(
-                    code = 400,
-                    message = "Describes errors on invalid payload received")
-    })
     public ResponseEntity<?> assignProjectToEmployee(
             @ApiParam(name = "idEmployee", required = true, value = "Employee Id", example = "1")
             @PathVariable("idEmployee") Long idEmployee,
@@ -135,17 +110,17 @@ public class EmployeeController {
 
         Map<String, Object> response = new HashMap<>();
 
-        EmployeeFullDataResponseDTO employeeFullDataResponseDTO;
-
         try {
-            employeeFullDataResponseDTO = employeeService.assignProjectToEmployee(idEmployee, idProject);
+            employeeService.assignProjectToEmployee(idEmployee, idProject);
+            response.put(CODE, HttpStatus.OK.value());
+            response.put(MESSAGE, OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RepositoryAccessException e) {
-            response.put(CODE, HttpStatus.NOT_FOUND.value());
+            response.put(CODE, HttpStatus.BAD_REQUEST.value());
             response.put(MESSAGE, e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(employeeFullDataResponseDTO);
     }
 
     @PatchMapping(
@@ -168,9 +143,9 @@ public class EmployeeController {
             response.put(MESSAGE, OK);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RepositoryAccessException e) {
-            response.put(CODE, HttpStatus.NOT_FOUND.value());
+            response.put(CODE, HttpStatus.BAD_REQUEST.value());
             response.put(MESSAGE, e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -197,9 +172,9 @@ public class EmployeeController {
             response.put(MESSAGE, OK);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RepositoryAccessException e) {
-            response.put(CODE, HttpStatus.NOT_FOUND.value());
+            response.put(CODE, HttpStatus.BAD_REQUEST.value());
             response.put(MESSAGE, e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
     }

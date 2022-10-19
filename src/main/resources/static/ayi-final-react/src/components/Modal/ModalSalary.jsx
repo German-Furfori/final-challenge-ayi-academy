@@ -29,10 +29,12 @@ export default function ModalSalary(props) {
 
   const handleUpdateSalary = async () => {
     let salary = document.getElementById('salary').value;
-    if(salary != null) {
+    if(salary != null && salary >= 100000) {
       let response = await updateEmployeeSalary(props.idEmployee, salary);
       alert(response.Message);
       window.location.reload();
+    } else {
+      alert('Incorrect value');
     }
   }
 

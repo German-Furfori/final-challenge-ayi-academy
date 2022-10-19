@@ -29,7 +29,6 @@ export default function Home() {
     { name: 'SpringBoot', icon: <SiSpringboot/> }
   ]
 
-  console.log(technologies);
   return (
     <>
       <Container fixed sx={{ paddingTop: 13, paddingBottom: 4 }}>
@@ -39,7 +38,8 @@ export default function Home() {
               Welcome!
             </Typography>
             <Typography sx={{ mb: 1.5, fontSize: 17, paddingTop: 3 }} color="text.secondary">
-              This is a web page to manage the salaries and project assignment of the enterprise employees
+              This is a web page to manage the salaries and project assignment of the enterprise employees.
+              Also, it will notify you every month with the monthly inflation information.
             </Typography>
           </CardContent>
         </Card>
@@ -52,8 +52,8 @@ export default function Home() {
             </Typography>
             <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 4, sm: 8, md: 12 }}>
               { technologies.map( (technology) => (
-                <Grid sx={{paddingBottom: 2}} item xs={12} sm={4} md={3}>
-                  <Typography variant="h1" align='center'>
+                <Grid sx={{paddingBottom: 3}} item xs={12} sm={4} md={3} key={technology.name}>
+                  <Typography variant="h2" align='center'>
                     {technology.icon} <br/>
                     <Typography variant="h5" align='center'>{technology.name}</Typography>
                   </Typography>

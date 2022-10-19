@@ -77,7 +77,7 @@ export default function SignIn() {
                         id="password"
                         autoComplete="current-password"
                     />
-                    <Typography component="h6" variant="h6">
+                    <Typography component="h6" variant="h6" sx={{ paddingTop: 1 }}>
                         { message && message }
                     </Typography>
                     <Button
